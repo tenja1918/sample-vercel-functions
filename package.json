@@ -1,0 +1,23 @@
+{
+  "name": "sample-vercel-functions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tenja1918/sample-vercel-functions.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tenja1918/sample-vercel-functions/issues"
+  },
+  "homepage": "https://github.com/tenja1918/sample-vercel-functions#readme",
+  "devDependencies": {
+    "@vercel/node": "^1.12.1"
+  }
+}
