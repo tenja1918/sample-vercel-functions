@@ -36,15 +36,15 @@ function headlines(vreq: VercelRequest, vres: VercelResponse) {
   const options: HeadlinesQueryOptions = {
     country: getFirstQuery(vreq.query.country, undefined),
     category: getFirstQuery(vreq.query.category, undefined),
-    q: getFirstQuery(vreq.query.q, undefined),
+    q: getFirstQuery(vreq.query.q, undefined, true),
     pageSize: getFirstQuery(vreq.query.pageSize, undefined),
   };
 
   fetchNews(options).then(async res => {
     vres.json(await res.data);
   }).catch(err => {
-    // vres.send('api error: ' + err);
-    vres.json({'message' : 'unknown'});
+    vres.json({'error' : err});
+    // vres.json({'message' : 'unknown'});
   });
 }
 
@@ -64,8 +64,13 @@ async function fetchNews(options: HeadlinesQueryOptions) {
   return await axios.get(path);
 }
 
-function getFirstQuery<T>(query: string | string[], defaultValue: T): string | T {
-  return [query].flat()[0] ?? defaultValue;
+function getFirstQuery<T>(query: string | string[], defaultValue: T, encode = false): string | T {
+  const res = [query].flat()[0] ?? defaultValue;
+  if (res != null && encode) {
+    return encodeURIComponent(res);
+  } else {
+    return res;
+  }
 }
 
 function createQuery(options: HeadlinesQueryOptions) {

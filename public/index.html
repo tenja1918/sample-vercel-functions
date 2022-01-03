@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+<head>
+  <title>Sample News App</title>
+  <script src="https://unpkg.com/vue@next"></script>
+</head>
+
+<body>
+  <h2>Get News</h2>
+  <div id="app" v-cloak>
+    <input v-model="q" maxlength="256" placeholder="検索したい内容..." />
+    <input class="btn btn-primary" type="button" value="ニュースを検索" @click="fetchNews" />
+    <hr />
+    <div id="newsList">
+      {{ result }}
+    </div>
+  </div>
+</body>
+
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        q: '',
+        status: 0,
+        result: null,
+      }
+    },
+    methods: {
+      async fetchNews() {
+        const url = new URL("https://sample-vercel-functions.vercel.app/api/news/headlines");
+        const queries = {
+          q: this.q,
+        };
+        url.search = new URLSearchParams(queries).toString();
+
+        fetch(url).then(res => {
+          this.status = res.status;
+          return res.json();
+        }).then(json => {
+          const newsList = document.getElementById('newsList');
+
+          while (newsList.firstChild) {
+            newsList.removeChild(newsList.firstChild);
+          }
+
+          if (json['totalResults'] == 0) {
+            const div = document.createElement('div');
+            div.innerHTML = '記事が見つかりませんでした';
+            newsList.appendChild(div);
+          } else {
+            json['articles'].forEach(item => {
+              const div = document.createElement('div');
+              div.classList.add('article');
+              div.innerHTML = `<a href="${item.url}" target="_blank">
+                       <img src="${item.urlToImage}">
+                       <p>${item.title}</p>
+                       </a>`;
+              newsList.appendChild(div);
+            });
+          }
+        });
+      },
+    },
+  });
+  app.mount('#app');
+</script>
+
+</html>
