@@ -1,4 +1,5 @@
-import { VercelRequest, VercelResponse } from "@vercel/node";
+import { VercelRequest, VercelResponse } from '@vercel/node';
+import axiosBase from 'axios';
 
 const NewsAPIConfig = {
   BASEURL: 'https://newsapi.org/v2',
@@ -9,23 +10,30 @@ const NewsAPIConfig = {
 type NewsAPIConfig = typeof NewsAPIConfig[keyof typeof NewsAPIConfig];
 
 export default function (vreq: VercelRequest, vres: VercelResponse) {
-  const query = [vreq.query.keyword].flat().at(0) ?? '';
+  // const query = [vreq.query.keyword].flat().at(0) ?? '';
+  const query = [vreq.query.keyword].flat()[0] ?? '';
   fetchNews(query).then(async res => {
-    vres.json(await res.json());
+    vres.json(await res.data);
   }).catch(err => {
-    vres.send('api error');
+    vres.send('api error: ' + err);
   });
 }
 
 async function fetchNews(_keyword: string) {
   const keyword = _keyword.substring(0, 1024);
-  const query = `country=ja&q=${keyword}`;
-  const url = NewsAPIConfig.BASEURL + '/' + NewsAPIConfig.ENDPOINT_HEADLINES + '?' + query;
-  const req = new Request(url, {
+  const query = `q=${keyword}`;
+
+  const axios = axiosBase.create({
+    baseURL: NewsAPIConfig.BASEURL,
     headers: {
-      Authentication: NewsAPIConfig.APIKEY,
+      Authorization: NewsAPIConfig.APIKEY,
     }
   });
+  const path = '/' + NewsAPIConfig.ENDPOINT_HEADLINES + '?' + query;
+  console.log('path = ' + path);
+  return await axios.get(path);
+}
 
-  return await fetch(req);
+function createQuery() {
+
 }
