@@ -69,7 +69,7 @@ function getFirstQuery<T>(query: string | string[], defaultValue: T): string | T
 }
 
 function createQuery(options: HeadlinesQueryOptions) {
-  const getValue = (name: string, q: string | number | undefined) => q != null ? `${name}=${q}`: undefined;
+  const getValue = (name: string, q: string | undefined) => (q != null && q.trim() !== '') ? `${name}=${q}`: undefined;
   const query = [
     getValue('country', options.country),
     getValue('category', options.category),
