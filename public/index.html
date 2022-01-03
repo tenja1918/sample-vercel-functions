@@ -27,8 +27,20 @@
     <input v-model="q" maxlength="256" placeholder="検索したい内容..." />
     <input class="btn btn-primary" type="button" value="ニュースを検索" @click="fetchNews" />
     <hr />
-    <div id="newsList">
+    <div id="newsList" v-if="articles.length > 0">
+      <!--
       {{ result }}
+      -->
+      <div id="article" v-for="article in articles" :key="article.title">
+        <a :href="article.url" target="_blank">
+          <img v-if="article.urlToImage" :src="article.urlToImage" />
+          <img v-else src="./images/no_image_logo.png" />
+          <p>{{ article.title }}</p>
+        </a>
+      </div>
+    </div>
+    <div id="notfound" v-if="articles.length === 0">
+      記事はありません。
     </div>
   </div>
 </body>
@@ -39,7 +51,8 @@
       return {
         q: '',
         status: 0,
-        result: null,
+        // result: null,
+        articles: [],
       }
     },
     methods: {
@@ -54,27 +67,27 @@
           this.status = res.status;
           return res.json();
         }).then(json => {
-          const newsList = document.getElementById('newsList');
+          // const newsList = document.getElementById('newsList');
+          // while (newsList.firstChild) {
+          //   newsList.removeChild(newsList.firstChild);
+          // }
 
-          while (newsList.firstChild) {
-            newsList.removeChild(newsList.firstChild);
-          }
-
-          if (json['totalResults'] == 0) {
-            const div = document.createElement('div');
-            div.innerHTML = '記事が見つかりませんでした';
-            newsList.appendChild(div);
-          } else {
-            json['articles'].forEach(item => {
-              const div = document.createElement('div');
-              div.classList.add('article');
-              div.innerHTML = `<a href="${item.url}" target="_blank">
-                       <img src="${item.urlToImage}">
-                       <p>${item.title}</p>
-                       </a>`;
-              newsList.appendChild(div);
-            });
-          }
+          // if (json['totalResults'] == 0) {
+          //   const div = document.createElement('div');
+          //   div.innerHTML = '記事が見つかりませんでした';
+          //   newsList.appendChild(div);
+          // } else {
+          //   json['articles'].forEach(item => {
+          //     const div = document.createElement('div');
+          //     div.classList.add('article');
+          //     div.innerHTML = `<a href="${item.url}" target="_blank">
+          //              <img src="${item.urlToImage}">
+          //              <p>${item.title}</p>
+          //              </a>`;
+          //     newsList.appendChild(div);
+          //   });
+          // }
+          this.articles = json['totalResults'] != 0 ? json['articles'] : [];
         });
       },
     },
