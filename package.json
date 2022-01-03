@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/tenja1918/sample-vercel-functions#readme",
   "devDependencies": {
-    "@vercel/node": "^1.12.1"
+    "@vercel/node": "^1.12.1",
+    "dts-gen": "^0.6.0"
   }
 }
