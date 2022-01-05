@@ -1,5 +1,5 @@
-node_modules/
-dist/
-.vscode/
-.vercel/
+node_modules
+dist
+.vscode
+.vercel
 package-lock.json

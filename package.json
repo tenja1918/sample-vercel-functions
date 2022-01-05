@@ -5,7 +5,10 @@
   "type": "module",
   "main": "dist/news/sample",
   "scripts": {
-    "start": "npx vercel dev"
+    "verceldev": "npx vercel dev",
+    "dev": "npx vite",
+    "build": "npx vue-tsc --noEmit && npx vite build",
+    "preview": "npx vite preview"
   },
   "repository": {
     "type": "git",
@@ -20,10 +23,13 @@
   "homepage": "https://github.com/tenja1918/sample-vercel-functions#readme",
   "devDependencies": {
     "@vercel/node": "^1.12.1",
-    "typescript": "^4.5.4",
-    "vercel": "^23.1.2"
+    "@vitejs/plugin-vue": "^2.0.0",
+    "vercel": "^23.1.2",
+    "vite": "^2.7.2",
+    "vue-tsc": "^0.29.8"
   },
   "dependencies": {
-    "axios": "^0.24.0"
+    "axios": "^0.24.0",
+    "vue": "^3.2.25"
   }
 }
